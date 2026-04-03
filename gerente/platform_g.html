@@ -42,28 +42,36 @@
                     <button>Acceder</button>
                 </div>
 
-                <!-- Próximamente: Gestión de Citas -->
-                <div class="action-card">
+                <!-- Gestión de Citas -->
+                <div class="action-card" id="btnManageAppointments">
                     <div class="icon">📅</div>
                     <h3>Gestionar Citas</h3>
                     <p>Administra la agenda completa de toda la barbería.</p>
-                    <button disabled>Próximamente</button>
+                    <button>Acceder</button>
                 </div>
 
-                <!-- Próximamente: Disponibilidad -->
-                <div class="action-card">
+                <!-- Disponibilidad -->
+                <div class="action-card" id="btnManageAvailability">
                     <div class="icon">⏰</div>
-                    <h3>Supervisar Disponibilidad</h3>
+                    <h3>Configurar Disponibilidad</h3>
                     <p>Controla los horarios y turnos de tus barberos.</p>
-                    <button disabled>Próximamente</button>
+                    <button>Acceder</button>
                 </div>
 
-                <!-- Próximamente: Pagos -->
-                <div class="action-card">
+                <!-- Pagos -->
+                <div class="action-card" id="btnManagePayments">
                     <div class="icon">💰</div>
                     <h3>Registrar Pagos</h3>
                     <p>Administra los ingresos y transacciones del día.</p>
-                    <button disabled>Próximamente</button>
+                    <button>Acceder</button>
+                </div>
+
+                <!-- Historial -->
+                <div class="action-card" id="btnManageHistory">
+                    <div class="icon">📜</div>
+                    <h3>Historial General</h3>
+                    <p>Consulta el registro completo de citas y pagos realizados.</p>
+                    <button>Ver Historial</button>
                 </div>
             </div>
         </section>
@@ -90,7 +98,10 @@
                         <div class="form-group">
                             <input type="password" id="barberoPass" placeholder="Contraseña temporal" required>
                         </div>
-                        <button type="submit" id="btnCrearBarbero">Registrar Barbero</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button type="submit" id="btnCrearBarbero" style="flex: 1;">Registrar Barbero</button>
+                            <button type="button" id="btnCancelarBarbero" class="cancel-link hidden" style="flex: 1;">Cancelar</button>
+                        </div>
                     </form>
                 </div>
 
@@ -104,6 +115,8 @@
                                     <th>ID</th>
                                     <th>Nombre</th>
                                     <th>Email</th>
+                                    <th>Contraseña</th>
+                                    <th>Calificación</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -172,7 +185,286 @@
                 </div>
             </div>
         </section>
+
+        <!-- SUB-MENÚ: Gestión de Disponibilidad -->
+        <section id="availabilitySection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackFromAvailability" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Horarios de Atención</h1>
+                <p>Configura los días y horas que tu barbería está abierta</p>
+            </div>
+
+            <div class="availability-container">
+                <div class="bulk-edit-card">
+                    <h3>Edición Rápida</h3>
+                    <p>Aplica el mismo horario a varios días marcados</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Apertura:</label>
+                            <input type="time" id="bulkOpen" value="08:00">
+                        </div>
+                        <div class="form-group">
+                            <label>Cierre:</label>
+                            <input type="time" id="bulkClose" value="20:00">
+                        </div>
+                        <button id="btnApplyBulk" class="secondary-btn">Aplicar a Seleccionados</button>
+                    </div>
+                </div>
+
+                <form id="availabilityForm">
+                    <div class="days-list" id="daysList">
+                        <!-- Generado dinámicamente: Lunes a Domingo -->
+                    </div>
+                    <button type="submit" class="save-config-btn">Guardar Configuración</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SUB-MENÚ: Supervisión de Citas -->
+        <section id="appointmentsSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackFromAppointments" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Agenda de Citas</h1>
+                <p>Supervisa el trabajo programado para tu equipo</p>
+            </div>
+
+            <div class="appointments-view">
+                <div id="appointmentsListByBarber">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+        </section>
+        <!-- MODAL: Editar Cita -->
+        <div id="modalEditCita" class="modal hidden">
+            <div class="modal-content">
+                <h2>Editar Cita</h2>
+                <form id="editCitaForm">
+                    <input type="hidden" id="editCitaId">
+                    <div class="form-group">
+                        <label>Barbero:</label>
+                        <select id="editCitaBarbero" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Servicio:</label>
+                        <select id="editCitaServicio" required></select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="save-btn">Guardar Cambios</button>
+                        <button type="button" id="btnCancelEditCita" class="cancel-btn">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- SUB-MENÚ: Registrar Pagos -->
+        <section id="paymentsSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackFromPayments" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Registrar Pagos</h1>
+                <p>Gestiona los cobros de citas programadas y ventas sin cita preeliminar.</p>
+            </div>
+
+            <div class="admin-section">
+                <!-- Cobro de Citas -->
+                <div class="section-card">
+                    <h2>Citas por Cobrar</h2>
+                    <p class="subtitle">Citas programadas para hoy que aún no se han cobrado</p>
+                    <div class="table-container">
+                        <table id="pendingPaymentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Cliente</th>
+                                    <th>Servicio</th>
+                                    <th>Precio</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingPaymentsList">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 2rem;">Cargando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Venta Directa (Sin Cita) -->
+                <div class="section-card">
+                    <h2>Registrar Venta Directa</h2>
+                    <p class="subtitle">Cobro para clientes que asisten sin previa cita</p>
+                    <form id="directPaymentForm">
+                        <div class="form-group">
+                            <label>Buscar Cliente (Opcional):</label>
+                            <input type="text" id="dpSearchClient" placeholder="Nombre o correo (Enter para buscar)...">
+                            <ul id="dpClientSearchResults" class="search-results hidden"></ul>
+                            <div id="dpSelectedClientBox" class="selected-client hidden">
+                                <span id="dpSelectedClientName"></span>
+                                <button type="button" id="dpRemoveClientBtn">X</button>
+                                <input type="hidden" id="dpClientId">
+                            </div>
+                            <label class="checkbox-label" style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                                <input type="checkbox" id="dpCasualClient">
+                                <span>Es cliente casual (no registrado)</span>
+                            </label>
+                            <input type="text" id="dpCasualName" placeholder="Nombre del cliente casual" class="hidden mt-2" style="background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; border: 1px solid var(--glass-border); width: 100%;">
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label>Barbero que atiende:</label>
+                            <select id="dpBarberoSelect" required></select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Servicio Realizado:</label>
+                            <select id="dpServicioSelect" required></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monto Pagado ($):</label>
+                            <input type="number" id="dpMonto" required step="0.01">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Método de Pago:</label>
+                            <select id="dpMetodoPago" required>
+                                <option value="efectivo">💵 Efectivo</option>
+                                <option value="transferencia">📱 Transferencia</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nota (Opcional):</label>
+                            <input type="text" id="dpNota" placeholder="Ej. Incluye propina">
+                        </div>
+
+                        <button type="submit" class="save-btn" style="width:100%">Registrar Pago Directo</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODAL: Cobro de Cita -->
+        <div id="modalCompleteCita" class="modal hidden">
+            <div class="modal-content">
+                <h2>Cobrar Cita</h2>
+                <form id="completeCitaForm">
+                    <p id="ccClientInfo" style="margin-bottom: 8px; color: var(--text-muted);"></p>
+                    <p id="ccServiceInfo" style="margin-bottom: 20px; font-weight: 600;"></p>
+                    
+                    <div class="form-group text-left" style="text-align: left;">
+                        <label>Precio Final ($):</label>
+                        <input type="number" id="ccMonto" required step="0.01" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--card-bg); color: white;">
+                    </div>
+
+                    <div class="form-group text-left" style="text-align: left;">
+                        <label>Nota (Opcional):</label>
+                        <input type="text" id="ccNota" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--card-bg); color: white;">
+                    </div>
+
+                    <p style="margin-top:20px; text-align: left;">Método de Pago:</p>
+                    <div class="payment-options">
+                        <button type="button" class="payment-btn" data-method="efectivo">💵 Efectivo</button>
+                        <button type="button" class="payment-btn" data-method="transferencia">📱 Transferencia</button>
+                    </div>
+                    <button type="button" id="btnCancelCompleteCita" class="cancel-link">Cancelar</button>
+                </form>
+            </div>
+        </div>
+        <!-- SUB-MENÚ: Historial General -->
+        <section id="historySection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackFromHistory" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Historial de Actividad</h1>
+                <p>Audita todos los servicios prestados y cancelados.</p>
+            </div>
+
+            <!-- Filtros de Historial -->
+            <div class="admin-section" style="grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="section-card" style="padding: 1.5rem;">
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label>Buscar Cliente:</label>
+                            <input type="text" id="histFilterClient" placeholder="Nombre del cliente...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Barbero:</label>
+                            <select id="histFilterBarber">
+                                <option value="">Todos los barberos</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Estado:</label>
+                            <select id="histFilterType">
+                                <option value="todos">Todos los registros</option>
+                                <option value="hecha">Citas Hechas / Pagos</option>
+                                <option value="cancelada">Citas Canceladas</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Desde:</label>
+                            <input type="date" id="histFilterStart">
+                        </div>
+                        <div class="filter-group">
+                            <label>Hasta:</label>
+                            <input type="date" id="histFilterEnd">
+                        </div>
+                        <div class="filter-actions" style="display:flex; align-items:flex-end;">
+                            <button id="btnApplyHistFilters" class="save-btn" style="padding: 10px 20px; font-size: 0.9rem;">Filtrar Resultados</button>
+                        </div>
+                    </div>
+                </div>
+            
+            <!-- Resumen de Ganancias -->
+            <div class="admin-section" style="grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="section-card" style="text-align: center;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-muted);">Ganancias de Hoy</h2>
+                    <p id="histEarningsToday" style="font-size: 2rem; font-weight: bold; color: var(--primary);">$0</p>
+                </div>
+                <div class="section-card" style="text-align: center;">
+                    <h2 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-muted);">Ganancias (Filtro Actual)</h2>
+                    <p id="histEarningsFiltered" style="font-size: 2rem; font-weight: bold; color: #ffd700;">$0</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Barbero</th>
+                            <th>Servicio</th>
+                            <th>Monto</th>
+                            <th>Estado / Método</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyList">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem;">Cargando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
+
+    <!-- MODAL: Ver Reseñas del Barbero -->
+    <div id="modalViewReviews" class="modal hidden">
+        <div class="modal-content" style="max-width: 600px;">
+            <h2>Reseñas de <span id="viewReviewsBarberName" style="color: var(--primary);"></span></h2>
+            
+            <div id="noReviewsMsg" style="color: var(--text-muted); margin-bottom: 2rem;">Cargando reseñas...</div>
+            
+            <div id="reviewsListContainer" style="max-height: 400px; overflow-y: auto; text-align: left; margin-top: 20px;">
+                <!-- Lista de reseñas inyectada por JS -->
+            </div>
+            
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button type="button" id="btnCloseReviewsModal" class="cancel-link" style="width: 100%; text-align: center; text-decoration: none; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">Cerrar Pantalla</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="platform_g.js"></script>
 </body>

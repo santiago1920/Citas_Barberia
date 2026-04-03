@@ -52,21 +52,21 @@
                     <div class="icon">📅</div>
                     <h3>Reservar Cita</h3>
                     <p>Agenda tu próximo cambio de estilo.</p>
-                    <button disabled>Próximamente</button>
+                    <button id="btnOpenBooking">Agendar Ahora</button>
                 </div>
 
                 <div class="action-card">
                     <div class="icon">🔄</div>
                     <h3>Gestionar Citas</h3>
                     <p>Cancela o reprograma tus citas actuales.</p>
-                    <button disabled>Próximamente</button>
+                    <button id="btnManageAppointments">Mis Citas</button>
                 </div>
 
                 <div class="action-card">
                     <div class="icon">📜</div>
                     <h3>Historial</h3>
                     <p>Mira tus citas pasadas y servicios.</p>
-                    <button disabled>Próximamente</button>
+                    <button id="btnViewHistory">Ver Historial</button>
                 </div>
             </div>
         </section>
@@ -74,7 +74,7 @@
         <!-- SECCIÓN 3: Lista de Barberos (Oculto al inicio) -->
         <section id="barbersSection" class="hidden">
             <div class="welcome-section">
-                <button id="btnBackToMenu" class="back-link">← Regresar al Menú</button>
+                <button id="btnBackToMenuFromBarbers" class="back-link">← Regresar al Menú</button>
                 <h1>Nuestros Barberos</h1>
                 <p>Conoce a los expertos de esta sucursal</p>
             </div>
@@ -84,8 +84,188 @@
                 <p class="loading-text">Cargando barberos...</p>
             </div>
         </section>
+
+        <!-- SECCIÓN 4: Agendar Cita (Oculto al inicio) -->
+        <section id="bookingSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToMenuFromBooking" class="back-link">← Cancelar Reserva</button>
+                <h1>Agendar Cita</h1>
+                <p>Completa los detalles para tu reserva</p>
+            </div>
+
+            <div class="booking-form-container">
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="bookingBarbero">Selecciona tu Barbero:</label>
+                        <select id="bookingBarbero" required>
+                            <option value="" disabled selected>Cargando barberos...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookingServicio">Selecciona el Servicio:</label>
+                        <select id="bookingServicio" required>
+                            <option value="" disabled selected>Cargando servicios...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="calendarGroup" class="hidden">
+                        <label>Selecciona la Fecha:</label>
+                        <div id="dynamicCalendar" class="calendar-container">
+                            <!-- Calendario generado por JS -->
+                        </div>
+                        <input type="hidden" id="bookingFecha" required>
+                    </div>
+
+                    <div class="form-group" id="timeSlotsGroup" class="hidden">
+                        <label>Selecciona la Hora:</label>
+                        <div class="time-tabs hidden" id="timeTabs">
+                            <button type="button" class="time-tab-btn active" data-period="morning">Mañana</button>
+                            <button type="button" class="time-tab-btn" data-period="afternoon">Tarde</button>
+                            <button type="button" class="time-tab-btn" data-period="evening">Noche</button>
+                        </div>
+                        <div id="timeSlotsGrid" class="time-slots-grid">
+                            <!-- Slots generados por JS -->
+                            <p class="loading-text">Selecciona una fecha primero.</p>
+                        </div>
+                        <input type="hidden" id="bookingHora" required>
+                    </div>
+
+                    <div class="booking-summary" id="bookingSummary">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+
+                    <button type="submit" class="confirm-booking-btn">Confirmar Cita</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: Gestionar Citas -->
+        <section id="manageApptsSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToMenuFromManage" class="back-link">← Regresar al Menú</button>
+                <h1>Mis Citas</h1>
+                <p>Administra tus citas pendientes</p>
+            </div>
+            <div id="myAppointmentsList" class="my-appointments-list">
+                <p class="loading-text">Cargando tus citas...</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Historial del Cliente -->
+        <section id="historialSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToMenuFromHistory" class="back-link">← Regresar al Menú</button>
+                <h1>Mi Historial</h1>
+                <p>Todas tus citas en esta barbería</p>
+            </div>
+
+            <!-- Filtros rápidos -->
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap; padding: 0 5%; margin-bottom:1.5rem;">
+                <button class="hist-filter-btn active" data-filter="todos" id="histFilterTodos">Todas</button>
+                <button class="hist-filter-btn" data-filter="programada" id="histFilterProgramadas">Programadas</button>
+                <button class="hist-filter-btn" data-filter="hecha" id="histFilterHechas">Hechas</button>
+                <button class="hist-filter-btn" data-filter="cancelada" id="histFilterCanceladas">Canceladas</button>
+            </div>
+
+            <div id="clientHistorialList" class="my-appointments-list">
+                <p class="loading-text">Cargando historial...</p>
+            </div>
+        </section>
     </main>
-    </main>
+
+    <!-- MODAL: Dejar Reseña -->
+    <div id="modalReviewBarber" class="modal hidden">
+        <div class="modal-content">
+            <h2>Calificar a <span id="reviewBarberNameDisplay" style="color: var(--primary);"></span></h2>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">Por favor, comparte tu experiencia tras tu última cita completada con este barbero.</p>
+            
+            <form id="reviewForm">
+                <input type="hidden" id="reviewBarberId">
+                <input type="hidden" id="existingReviewId">
+                
+                <div class="rating-stars-input" id="ratingStarsInput">
+                    <!-- Javascript will handle the interactive stars and their logic -->
+                    <span class="star-rating" data-value="5">★</span>
+                    <span class="star-rating" data-value="4">★</span>
+                    <span class="star-rating" data-value="3">★</span>
+                    <span class="star-rating" data-value="2">★</span>
+                    <span class="star-rating" data-value="1">★</span>
+                </div>
+                <input type="hidden" id="reviewCalificacion" value="0" required>
+                
+                <div class="form-group mt-3 text-left">
+                    <label>Comentario (Opcional):</label>
+                    <textarea id="reviewComment" rows="4" placeholder="¿Qué te pareció el servicio?" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: white; resize: none; margin-top: 8px;"></textarea>
+                </div>
+                
+                <div class="modal-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="save-btn" style="flex: 2; padding: 12px; border-radius: 8px; background: var(--primary); color: #121212; font-weight: bold; border: none; cursor: pointer;">Enviar Reseña</button>
+                    <button type="button" id="btnCancelReview" class="cancel-btn" style="flex: 1; padding: 12px; border-radius: 8px; background: transparent; color: var(--text-muted); border: 1px solid var(--glass-border); cursor: pointer;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- MODAL: Ver Reseñas Públicas -->
+    <div id="modalClientViewReviews" class="modal hidden">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>Reseñas de <span id="clientViewReviewsBarberName" style="color: var(--primary);"></span></h2>
+            
+            <div id="clientNoReviewsMsg" style="color: var(--text-muted); margin-bottom: 2rem;">Cargando reseñas...</div>
+            
+            <div id="clientReviewsListContainer" style="max-height: 380px; overflow-y: auto; text-align: left; margin-top: 15px;">
+                <!-- Lista de reseñas inyectada por JS -->
+            </div>
+            
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button type="button" id="btnClientCloseReviewsModal" class="cancel-link" style="width: 100%; text-align: center; text-decoration: none; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">Cerrar Pantalla</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Editar Cita -->
+    <div id="modalEditAppointment" class="modal hidden">
+        <div class="modal-content" style="max-width: 700px; text-align: left; max-height: 90vh; overflow-y: auto;">
+            <h2 style="text-align:center;">Editar Cita</h2>
+            <p style="text-align:center; color:var(--text-muted); margin-bottom:1.5rem;">Modifica los detalles de tu cita</p>
+            <form id="editApptForm">
+                <input type="hidden" id="editApptId">
+                <input type="hidden" id="editApptFecha">
+                <input type="hidden" id="editApptHora">
+
+                <div class="form-group">
+                    <label>Barbero:</label>
+                    <select id="editApptBarbero" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Servicio:</label>
+                    <select id="editApptServicio" required></select>
+                </div>
+
+                <div class="form-group" id="editCalendarGroup">
+                    <label>Selecciona la Fecha:</label>
+                    <div id="editDynamicCalendar" class="calendar-container"></div>
+                </div>
+
+                <div class="form-group" id="editTimeSlotsGroup" style="display:none;">
+                    <label>Selecciona la Hora:</label>
+                    <div class="time-tabs" id="editTimeTabs" style="display:none;">
+                        <button type="button" class="time-tab-btn edit-tab active" data-period="morning">Mañana</button>
+                        <button type="button" class="time-tab-btn edit-tab" data-period="afternoon">Tarde</button>
+                        <button type="button" class="time-tab-btn edit-tab" data-period="evening">Noche</button>
+                    </div>
+                    <div id="editTimeSlotsGrid" class="time-slots-grid"></div>
+                </div>
+
+                <div id="editBookingSummary" class="booking-summary"></div>
+
+                <div style="display:flex; gap:10px; margin-top:1.5rem;">
+                    <button type="submit" class="appt-edit-btn" style="flex:1;">Guardar Cambios</button>
+                    <button type="button" id="btnCancelEditAppt" class="appt-cancel-btn" style="flex:1;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script type="module" src="platform_c.js"></script>
 </body>

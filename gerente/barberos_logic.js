@@ -30,27 +30,53 @@ export async function loadBarberos(db, currentShop) {
 /**
  * Renderiza la lista de barberos en la tabla
  */
-export function renderBarberos(barberos, container, onDelete) {
+export async function renderBarberos(db, barberos, container, onDelete, onViewReviews) {
     if (!container) return;
     
     if (barberos.length === 0) {
-        container.innerHTML = '<tr><td colspan="4" style="text-align: center;">No hay barberos registrados.</td></tr>';
+        container.innerHTML = '<tr><td colspan="5" style="text-align: center;">No hay barberos registrados.</td></tr>';
         return;
     }
 
     container.innerHTML = '';
-    barberos.forEach(b => {
+    for (const b of barberos) {
+        // Obtenemos reseñas
+        const reseñas = await getBarberReviews(db, b.uid);
+        let rating = 0;
+        let averageText = "Sin reseñas";
+        if (reseñas.length > 0) {
+            const sum = reseñas.reduce((acc, curr) => acc + curr.calificacion, 0);
+            rating = sum / reseñas.length;
+            averageText = `${rating.toFixed(1)} ★ (${reseñas.length})`;
+        }
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><span class="id-badge">${b.barberoId || 'N/A'}</span></td>
             <td>${b.nombres}</td>
             <td>${b.email}</td>
-            <td><button class="delete-btn" data-id="${b.uid}">Eliminar</button></td>
+            <td>${b.passOriginal || '<em>N/A</em>'}</td>
+            <td><strong>${averageText}</strong></td>
+            <td>
+                <button class="edit-btn update-barber-btn" data-id="${b.uid}">Editar</button>
+                <button class="edit-btn view-reviews-btn" data-id="${b.uid}">Ver Reseñas</button>
+                <button class="delete-btn" data-id="${b.uid}">Eliminar</button>
+            </td>
         `;
         
         tr.querySelector('.delete-btn').addEventListener('click', () => onDelete(b.uid, b.nombres));
+        if (onViewReviews) {
+            tr.querySelector('.view-reviews-btn').addEventListener('click', () => onViewReviews(b.uid, b.nombres, reseñas));
+        }
+        tr.querySelector('.update-barber-btn').addEventListener('click', () => {
+            // Se puede disparar un evento global o añadir otro callback, pero para simplicar 
+            // llamaremos al global si se pasa o usamos el DOM. Usaremos un custom event o un modo global.
+            // Para no romper la firma de renderBarberos, despacharemos un CustomEvent sobre la tabla.
+            container.dispatchEvent(new CustomEvent('editBarbero', { detail: b }));
+        });
+        
         container.appendChild(tr);
-    });
+    }
 }
 
 /**
@@ -95,6 +121,7 @@ export async function createBarbero(secondaryAuth, db, currentShop, barberData, 
             email: email,
             rol: 'barbero',
             nit: currentShop.nit,
+            passOriginal: pass,
             barberoId: nextId,
             fechaRegistro: new Date().toISOString()
         });
@@ -117,6 +144,39 @@ export async function deleteBarbero(db, uid) {
         await deleteDoc(doc(db, "usuarios", uid));
     } catch (error) {
         console.error("Error al eliminar barbero:", error);
+        throw error;
+    }
+}
+
+/**
+ * Obtiene todas las reseñas de un barbero
+ */
+export async function getBarberReviews(db, barberoId) {
+    if (!barberoId) return [];
+    try {
+        const q = query(collection(db, "resenas"), where("barberoId", "==", barberoId));
+        const querySnapshot = await getDocs(q);
+        const resenas = [];
+        querySnapshot.forEach(doc => {
+            resenas.push({ id: doc.id, ...doc.data() });
+        });
+// Sort descending by date
+        return resenas.sort((a, b) => b.fecha.localeCompare(a.fecha));
+    } catch (error) {
+        console.error("Error al obtener reseñas del barbero:", error);
+        return [];
+    }
+}
+
+/**
+ * Actualiza los datos editables del barbero en Firestore sin modificar Auth
+ */
+export async function updateBarberoLocally(db, uid, data) {
+    try {
+        const barberoRef = doc(db, "usuarios", uid);
+        await setDoc(barberoRef, data, { merge: true });
+    } catch (error) {
+        console.error("Error actualizando barbero:", error);
         throw error;
     }
 }

@@ -1,9 +1,7 @@
-
-/* Platform Specific Styles */
-
-:root {
-    --card-bg: rgba(255, 255, 255, 0.05);
-    --card-hover: rgba(203, 163, 92, 0.1);
+body {
+    display: block;
+    margin: 0;
+    padding: 0;
 }
 
 .dashboard-header {
@@ -304,8 +302,304 @@
     transition: all 0.3s ease;
 }
 
-.review-btn::after {
-    content: " (Próximamente)";
+
+
+/* Calendar Styles */
+.calendar-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem 0;
+    scrollbar-width: thin;
+}
+
+.calendar-day-btn {
+    flex: 0 0 auto;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 10px 15px;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 70px;
+}
+
+.calendar-day-btn span {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.calendar-day-btn small {
     font-size: 0.8rem;
-    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.calendar-day-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--card-hover);
+    transform: translateY(-2px);
+}
+
+.calendar-day-btn.selected {
+    background: var(--primary);
+    color: #121212;
+    border-color: var(--primary);
+}
+
+.calendar-day-btn.selected small {
+    color: #121212;
+}
+
+.calendar-day-btn:disabled, .closed-day {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Time Slots Tabs */
+.time-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 1rem;
+}
+
+.time-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.time-tab-btn.active {
+    background: var(--card-bg);
+    color: var(--primary);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Time Slots Grid */
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.time-slot-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.time-slot-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--card-hover);
+}
+
+.time-slot-btn.selected {
+    background: var(--primary);
+    color: #121212;
+    border-color: var(--primary);
+    font-weight: bold;
+}
+
+.time-slot-btn:disabled, .occupied-slot {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: rgba(255,50,50,0.1);
+    border-color: rgba(255,50,50,0.2);
+}
+
+.no-slots-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px dashed var(--glass-border);
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #151515;
+    border: 1px solid var(--glass-border);
+    padding: 3rem 2.5rem;
+    border-radius: 24px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 40px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.modal-content h2 {
+    margin-bottom: 0.5rem;
+    color: white;
+    font-size: 1.8rem;
+}
+
+/* Interactive Star Rating */
+.rating-stars-input {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 1.5rem 0;
+    direction: rtl; /* Tricky way to handle pure CSS hover state */
+}
+
+.rating-stars-input .star-rating {
+    font-size: 2.5rem;
+    color: var(--glass-border);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.rating-stars-input .star-rating:hover,
+.rating-stars-input .star-rating:hover ~ .star-rating,
+.rating-stars-input .star-rating.active,
+.rating-stars-input .star-rating.active ~ .star-rating {
+    color: #ffd700;
+}
+
+/* Appointment Management */
+.my-appointments-list {
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.appt-card {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: border-color 0.3s;
+}
+
+.appt-card:hover {
+    border-color: var(--primary);
+}
+
+.appt-info h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.appt-info p {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.appt-info .appt-datetime {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.appt-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.appt-edit-btn {
+    background: var(--primary);
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.appt-edit-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.appt-cancel-btn {
+    background: transparent;
+    color: var(--error);
+    border: 1px solid var(--error);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.appt-cancel-btn:hover {
+    background: var(--error);
+    color: white;
+}
+
+/* Edit Appointment Modal */
+.modal-content .form-group {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.modal-content .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.modal-content .form-group select,
+.modal-content .form-group input[type="date"],
+.modal-content .form-group input[type="time"] {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    font-size: 0.95rem;
+    box-sizing: border-box;
 }
