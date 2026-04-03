@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Gerente - Barbería Premium</title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="platform_g.css">
+    <meta name="description" content="Gestiona tu barbería y personal en nuestra plataforma premium.">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo">Barbería<span>Premium</span></div>
+        <div class="shop-info" id="shopInfo">
+            <span id="shopName">Cargando...</span> | NIT: <span id="shopNit">...</span>
+        </div>
+        <button id="btnLogout" class="logout-btn">Cerrar Sesión</button>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- MENÚ PRINCIPAL (HUB) -->
+        <section id="mainDashboard">
+            <div class="welcome-section">
+                <h1>Panel de Administración</h1>
+                <p>Gestiona todos los aspectos de tu negocio desde aquí</p>
+            </div>
+
+            <div class="action-grid">
+                <!-- Opción Activa: Gestión de Personal -->
+                <div class="action-card" id="btnManageStaff">
+                    <div class="icon">👥</div>
+                    <h3>Gestionar Barberos</h3>
+                    <p>Registra, visualiza y administra a tu equipo de trabajo.</p>
+                    <button>Acceder</button>
+                </div>
+
+                <!-- Gestión de Servicios Activa -->
+                <div class="action-card" id="btnManageServices">
+                    <div class="icon">✂️</div>
+                    <h3>Gestionar Servicios</h3>
+                    <p>Crea, edita o elimina los servicios ofrecidos en tu local.</p>
+                    <button>Acceder</button>
+                </div>
+
+                <!-- Próximamente: Gestión de Citas -->
+                <div class="action-card">
+                    <div class="icon">📅</div>
+                    <h3>Gestionar Citas</h3>
+                    <p>Administra la agenda completa de toda la barbería.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+
+                <!-- Próximamente: Disponibilidad -->
+                <div class="action-card">
+                    <div class="icon">⏰</div>
+                    <h3>Supervisar Disponibilidad</h3>
+                    <p>Controla los horarios y turnos de tus barberos.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+
+                <!-- Próximamente: Pagos -->
+                <div class="action-card">
+                    <div class="icon">💰</div>
+                    <h3>Registrar Pagos</h3>
+                    <p>Administra los ingresos y transacciones del día.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUB-MENÚ: Gestión de Personal (Oculto al inicio) -->
+        <section id="staffSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToMenu" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Gestión de Barberos</h1>
+                <p>Administra el personal activo de tu barbería</p>
+            </div>
+
+            <div class="admin-section">
+                <div class="section-card">
+                    <h2>Registrar Nuevo Barbero</h2>
+                    <p class="subtitle">Agrega personal a tu equipo de trabajo</p>
+                    <form id="barberoForm">
+                        <div class="form-group">
+                            <input type="text" id="barberoNombre" placeholder="Nombre completo" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="barberoEmail" placeholder="Correo electrónico" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="barberoPass" placeholder="Contraseña temporal" required>
+                        </div>
+                        <button type="submit" id="btnCrearBarbero">Registrar Barbero</button>
+                    </form>
+                </div>
+
+                <div class="section-card">
+                    <h2>Tu Equipo de Barberos</h2>
+                    <p class="subtitle">Listado de personal activo y sus IDs</p>
+                    <div class="table-container">
+                        <table id="barberosTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="barberosList">
+                                <!-- Dinámico -->
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 2rem;">Cargando personal...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUB-MENÚ: Gestión de Servicios (Oculto al inicio) -->
+        <section id="servicesSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackFromServices" class="back-link">← Regresar al Menú Principal</button>
+                <h1>Gestión de Servicios</h1>
+                <p>Configura los servicios que ofreces en tu barbería</p>
+            </div>
+
+            <div class="admin-section">
+                <div class="section-card">
+                    <h2 id="servicioFormTitle">Agregar Nuevo Servicio</h2>
+                    <p class="subtitle">Define nombre, precio y tiempo de demora</p>
+                    <form id="servicioForm">
+                        <div class="form-group">
+                            <input type="text" id="servicioNombre" placeholder="Nombre (ej: Corte Clásico)" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="servicioPrecio" placeholder="Precio (informativo)" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="servicioTiempo" placeholder="Tiempo (en minutos)" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" id="btnCrearServicio">Agregar Servicio</button>
+                            <button type="button" id="btnCancelarEdicion" class="hidden cancel-btn">Cancelar Edición</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="section-card">
+                    <h2>Servicios Disponibles</h2>
+                    <p class="subtitle">Lista de servicios actuales</p>
+                    <div class="table-container">
+                        <table id="serviciosTable">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>Precio</th>
+                                    <th>Tiempo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="serviciosList">
+                                <!-- Dinámico -->
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 2rem;">No hay servicios registrados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="platform_g.js"></script>
+</body>
+</html>

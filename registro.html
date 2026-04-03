@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Universitario</title>
+    <link rel="stylesheet" href="index.css">
+    <meta name="description" content="Regístrate en nuestra Barbería Premium para agendar tus citas y acceder a beneficios exclusivos.">
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Crear Cuenta</h2>
+        <p class="subtitle">Únete a nuestra exclusiva comunidad de estilo</p>
+        <form id="registroForm">
+            <div class="role-selector" id="roleSelector">
+                <div class="role-option active" data-role="cliente" id="btnCliente">Cliente</div>
+                <div class="role-option" data-role="gerente" id="btnGerente">Gerente</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <input type="text" id="nombres" placeholder="Nombres" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <input type="text" id="apellidos" placeholder="Apellidos" required>
+                </div>
+            </div>
+
+            <div id="empresaContainer" class="hidden">
+                <div class="form-row">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type="text" id="nombreEmpresa" placeholder="Nombre de la empresa">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type="text" id="nit" placeholder="NIT">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Contraseña" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="confirmPassword" placeholder="Confirmar contraseña" required>
+            </div>
+
+            <button type="submit" id="btnRegistro">Registrarse</button>
+        </form>
+
+        <p class="footer-text">
+            ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a>
+        </p>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

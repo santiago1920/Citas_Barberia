@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Cliente - Barbería Premium</title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="platform_c.css">
+    <meta name="description" content="Gestiona tus citas en nuestra Barbería Premium.">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo">Barbería<span>Premium</span></div>
+        <button id="btnLogout" class="logout-btn">Cerrar Sesión</button>
+    </header>
+
+    <main class="dashboard-container">
+        <!-- SECCIÓN 1: Selección de Barbería -->
+        <section id="shopSelectionSection">
+            <div class="welcome-section">
+                <h1>Selecciona una Barbería</h1>
+                <p>Busca tu barbería favorita para comenzar</p>
+            </div>
+            
+            <div class="search-bar-container">
+                <input type="text" id="shopSearch" placeholder="Escribe el nombre de la barbería...">
+            </div>
+
+            <div id="shopList" class="shop-grid">
+                <!-- Se cargará dinámicamente -->
+                <p class="loading-text">Cargando barberías...</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Menú de Acciones (Oculto al inicio) -->
+        <section id="actionMenu" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToShops" class="back-link">← Cambiar de Barbería</button>
+                <h1 id="selectedShopName">Barbería Seleccionada</h1>
+                <p>¡Hola de nuevo, <span id="userName">Cliente</span>! ¿Qué deseas hacer hoy?</p>
+            </div>
+
+            <div class="action-grid">
+                <div class="action-card">
+                    <div class="icon">💈</div>
+                    <h3>Ver Barberos</h3>
+                    <p>Explora nuestros talentos disponibles.</p>
+                    <button id="btnViewBarbers">Ver Staff</button>
+                </div>
+
+                <div class="action-card">
+                    <div class="icon">📅</div>
+                    <h3>Reservar Cita</h3>
+                    <p>Agenda tu próximo cambio de estilo.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+
+                <div class="action-card">
+                    <div class="icon">🔄</div>
+                    <h3>Gestionar Citas</h3>
+                    <p>Cancela o reprograma tus citas actuales.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+
+                <div class="action-card">
+                    <div class="icon">📜</div>
+                    <h3>Historial</h3>
+                    <p>Mira tus citas pasadas y servicios.</p>
+                    <button disabled>Próximamente</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Lista de Barberos (Oculto al inicio) -->
+        <section id="barbersSection" class="hidden">
+            <div class="welcome-section">
+                <button id="btnBackToMenu" class="back-link">← Regresar al Menú</button>
+                <h1>Nuestros Barberos</h1>
+                <p>Conoce a los expertos de esta sucursal</p>
+            </div>
+
+            <div id="barberList" class="barber-grid">
+                <!-- Se cargará dinámicamente -->
+                <p class="loading-text">Cargando barberos...</p>
+            </div>
+        </section>
+    </main>
+    </main>
+
+    <script type="module" src="platform_c.js"></script>
+</body>
+</html>

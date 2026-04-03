@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Barbería Premium</title>
+    <link rel="stylesheet" href="index.css">
+    <meta name="description" content="Inicia sesión en tu cuenta de Barbería Premium para gestionar tus citas.">
+</head>
+<body>
+    <div class="registration-container">
+        <h2>Bienvenido de nuevo</h2>
+        <p class="subtitle">Accede a tu cuenta según tu rol</p>
+        <form id="loginForm">
+            <div class="role-selector" id="roleSelector">
+                <div class="role-option active" data-role="cliente" id="btnCliente">Cliente</div>
+                <div class="role-option" data-role="gerente" id="btnGerente">Gerente</div>
+                <div class="role-option" data-role="barbero" id="btnBarbero">Barbero</div>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Correo electrónico" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Contraseña" required>
+            </div>
+
+            <button type="submit" id="btnLogin">Iniciar Sesión</button>
+        </form>
+
+        <p class="footer-text">
+            ¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>
+        </p>
+    </div>
+
+    <script type="module" src="login.js"></script>
+</body>
+</html>
