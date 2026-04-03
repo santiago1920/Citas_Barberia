@@ -69,7 +69,7 @@ onAuthStateChanged(auth, async (user) => {
         await refreshBarberos();
         await refreshServicios();
     } else {
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 });
 
@@ -212,5 +212,5 @@ btnBackFromServices.addEventListener('click', () => {
 // --- 5. Sesión ---
 btnLogout.addEventListener('click', async () => {
     await signOut(auth);
-    window.location.href = '../login.html';
+    window.location.href = '../index.html';
 });

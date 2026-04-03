@@ -61,7 +61,7 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // Usuario no autenticado, redirigir al login
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 });
 
@@ -218,7 +218,7 @@ btnLogout.addEventListener('click', async () => {
     try {
         await signOut(auth);
         alert("Sesión cerrada correctamente.");
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     } catch (error) {
         console.error("Error al cerrar sesión:", error);
         alert("Hubo un problema al cerrar la sesión.");
